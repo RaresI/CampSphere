@@ -4,10 +4,11 @@
 
 CampSphere is a full-stack web application designed to simplify the management of educational camps. It provides dedicated portals for parents, children, instructors, administrators, and camp owners with modern, role-specific dashboards.
 
-Team:
-Ionescu Rares-Andrei -> Child & Parent Portals
-Petrec Matei -> Admin Portal
-Leonte Robert -> Owner & Instructor Portals
+**Team:**
+- Ionescu Rares-Andrei -> Child & Parent Portals
+- Petrec Matei -> Admin Portal
+- Leonte Robert -> Owner & Instructor Portals
+
 ---
 
 ## ✨ Features
