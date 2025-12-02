@@ -28,7 +28,10 @@ public class ChildController {
                         c.getId(),
                         c.getName(),
                         c.getSchool(),
-                        c.getParent().getId()      // ← here
+                        c.getParent().getId(),
+                        c.getDateOfBirth() != null ? c.getDateOfBirth().toString() : null,
+                        c.getMedicalInfo(),
+                        c.getEmail()
                 ))
                 .toList();
     }
@@ -41,7 +44,10 @@ public class ChildController {
                         c.getId(),
                         c.getName(),
                         c.getSchool(),
-                        c.getParent().getId()    // ← and here
+                        c.getParent().getId(),
+                        c.getDateOfBirth() != null ? c.getDateOfBirth().toString() : null,
+                        c.getMedicalInfo(),
+                        c.getEmail()
                 )))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -73,7 +79,10 @@ public class ChildController {
                 saved.getId(),
                 saved.getName(),
                 saved.getSchool(),
-                saved.getParent().getId()   // ← and here
+                saved.getParent().getId(),
+                saved.getDateOfBirth() != null ? saved.getDateOfBirth().toString() : null,
+                saved.getMedicalInfo(),
+                saved.getEmail()
         );
         return ResponseEntity.ok(dto);
     }
@@ -93,7 +102,10 @@ public class ChildController {
                 saved.getId(),
                 saved.getName(),
                 saved.getSchool(),
-                saved.getParent().getId()   // ← and here
+                saved.getParent().getId(),
+                saved.getDateOfBirth() != null ? saved.getDateOfBirth().toString() : null,
+                saved.getMedicalInfo(),
+                saved.getEmail()
         );
         return ResponseEntity.ok(dto);
     }

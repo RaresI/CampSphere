@@ -1,115 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>📅 View Camp Schedule</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .card {
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <title>View Schedule - CampSphere</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="/css/modern-style.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+            border-radius: 0 0 2rem 2rem;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+        }
+        
+        .schedule-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 2px solid #e9d5ff;
+            margin-bottom: 2rem;
+        }
+    </style>
 </head>
 <body class="d-flex flex-column min-vh-100">
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-  <div class="container">
-    <a class="navbar-brand" href="/">e-Camp</a>
-    <ul class="navbar-nav ms-auto">
-      <li class="nav-item"><a class="nav-link" href="/owner-dashboard.html">Dashboard</a></li>
-      <li class="nav-item"><a class="nav-link" href="/index.html">Home</a></li>
-    </ul>
-  </div>
+<nav class="modern-navbar">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">⛺ CampSphere</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/owner-dashboard.html">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="/owner-login.html">Log out</a></li>
+            </ul>
+        </div>
+    </div>
 </nav>
 
-<!-- MAIN CONTENT -->
-<div class="container my-5">
-  <div class="text-center mb-4">
-    <h2 class="display-5">📆 Camp Schedule</h2>
-  </div>
-
-  <div class="card p-4 mb-4">
-    <label for="campSelect" class="form-label">Select Camp</label>
-    <select id="campSelect" class="form-select"></select>
-  </div>
-
-  <div class="card p-4">
-    <h5 class="mb-3">Daily Activities</h5>
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped align-middle" id="scheduleTable">
-        <thead class="table-light">
-        <tr>
-          <th>Date</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-          <th>Group</th>
-          <th>Activity</th>
-          <th>Instructor ID</th>
-        </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+<!-- PAGE HEADER -->
+<div class="page-header text-center">
+    <div class="container">
+        <h1 class="display-5 fw-bold mb-2">📅 View Camp Schedule</h1>
+        <p class="lead mb-0">Browse daily activities and schedules</p>
     </div>
-  </div>
+</div>
 
-  <div class="mt-4 text-center">
-    <a href="/owner-dashboard.html" class="btn btn-outline-primary mt-4">← Back to Dashboard</a>
-  </div>
+<!-- MAIN CONTENT -->
+<div class="container pb-5">
+    <div class="schedule-card mb-4">
+        <label class="modern-form-label">Select Camp</label>
+        <select id="campSelect" class="modern-form-control" style="width: 100%;"></select>
+    </div>
+
+    <div class="schedule-card">
+        <h4 class="fw-bold mb-4" style="color: #8b5cf6;">📋 Daily Activities</h4>
+        <div class="table-responsive">
+            <table class="modern-table" id="scheduleTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Group</th>
+                        <th>Activity</th>
+                        <th>Instructor ID</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="/owner-dashboard.html" class="btn btn-outline-primary rounded-pill px-4">← Back to Dashboard</a>
+    </div>
 </div>
 
 <!-- FOOTER -->
-<footer class="bg-white text-center py-3 mt-auto">
-  <small>© 2025 e-Camp. All rights reserved.</small>
+<footer class="modern-footer mt-auto">
+    <div class="container text-center">
+        <p class="mb-0">© 2025 CampSphere. Making camp memories! ⛺</p>
+    </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  async function loadCamps() {
-    const res = await fetch("/api/camps", { credentials: "include" });
-    if (res.status === 401 || res.status === 403) {
-      return window.location.href = "/owner-login.html";
+    async function loadCamps() {
+      const res = await fetch("/api/camps", { credentials: "include" });
+      if (res.status === 401 || res.status === 403) {
+        return window.location.href = "/owner-login.html";
+      }
+      const camps = await res.json();
+      const select = document.getElementById("campSelect");
+      camps.forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        opt.text = `${c.name} (${c.startDate} – ${c.endDate})`;
+        select.appendChild(opt);
+      });
+      if (camps.length) loadSchedule(camps[0].id);
+      select.addEventListener("change", e => loadSchedule(e.target.value));
     }
-    const camps = await res.json();
-    const select = document.getElementById("campSelect");
-    camps.forEach(c => {
-      const opt = document.createElement("option");
-      opt.value = c.id;
-      opt.text = `${c.name} (${c.startDate} – ${c.endDate})`;
-      select.appendChild(opt);
-    });
-    if (camps.length) loadSchedule(camps[0].id);
-    select.addEventListener("change", e => loadSchedule(e.target.value));
-  }
 
-  async function loadSchedule(campId) {
-    const res = await fetch(`/api/schedules/byCamp/${campId}`, { credentials: "include" });
-    if (res.status === 401 || res.status === 403) {
-      return window.location.href = "/owner-login.html";
+    async function loadSchedule(campId) {
+      const res = await fetch(`/api/schedules/byCamp/${campId}`, { credentials: "include" });
+      if (res.status === 401 || res.status === 403) {
+        return window.location.href = "/owner-login.html";
+      }
+      const schedule = await res.json();
+      const tbody = document.querySelector("#scheduleTable tbody");
+      tbody.innerHTML = "";
+      schedule.forEach(ent => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${ent.date}</td>
+          <td>${ent.startTime}</td>
+          <td>${ent.endTime}</td>
+          <td>${ent.groupName}</td>
+          <td>${ent.activityName}</td>
+          <td>${ent.instructorId}</td>
+        `;
+        tbody.appendChild(row);
+      });
     }
-    const schedule = await res.json();
-    const tbody = document.querySelector("#scheduleTable tbody");
-    tbody.innerHTML = "";
-    schedule.forEach(ent => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${ent.date}</td>
-        <td>${ent.startTime}</td>
-        <td>${ent.endTime}</td>
-        <td>${ent.groupName}</td>
-        <td>${ent.activityName}</td>
-        <td>${ent.instructorId}</td>
-      `;
-      tbody.appendChild(row);
-    });
-  }
 
-  loadCamps();
+    loadCamps();
 </script>
-
 </body>
 </html>

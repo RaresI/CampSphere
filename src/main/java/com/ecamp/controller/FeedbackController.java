@@ -17,8 +17,16 @@ public class FeedbackController {
     @Autowired private ChildRepository childRepo;
 
     @GetMapping
-    public List<FeedbackDTO> list() {
-        return repo.findAll().stream().map(f -> new FeedbackDTO(
+    public List<FeedbackDTO> list(@RequestParam(required = false) Long campId) {
+        List<Feedback> feedbacks;
+        if (campId != null) {
+            feedbacks = repo.findAll().stream()
+                .filter(f -> f.getCamp().getId().equals(campId))
+                .toList();
+        } else {
+            feedbacks = repo.findAll();
+        }
+        return feedbacks.stream().map(f -> new FeedbackDTO(
                 f.getId(),
                 f.getComment(),
                 f.getSubmittedAt(),

@@ -46,7 +46,15 @@ public class GroupController {
                         group.getId(),                    // <-- now sending the ID
                         group.getName(),                  // group name
                         group.getChildren().stream()
-                                .map(c -> new ChildDTO(c.getId(), c.getName(), c.getSchool(), c.getParent().getId()))
+                                .map(c -> new ChildDTO(
+                                        c.getId(), 
+                                        c.getName(), 
+                                        c.getSchool(), 
+                                        c.getParent().getId(),
+                                        c.getDateOfBirth() != null ? c.getDateOfBirth().toString() : null,
+                                        c.getMedicalInfo(),
+                                        c.getEmail()
+                                ))
                                 .toList()
                 ))
                 .toList();

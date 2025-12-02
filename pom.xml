@@ -11,8 +11,8 @@
 	<groupId>com.ecamp</groupId>
 	<artifactId>ecamp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>E_CAMP</name>
-	<description>E_CAMP</description>
+	<name>CampSphere</name>
+	<description>CampSphere - Educational Camp Management Platform</description>
 	<url/>
 	<licenses>
 		<license/>

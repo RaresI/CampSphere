@@ -2,18 +2,162 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Camp Groups</title>
+    <title>Manage Groups - CampSphere</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="/css/modern-style.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* Animated background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(251, 146, 60, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(249, 115, 22, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+            border-radius: 0 0 2rem 2rem;
+            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-header::before {
+            content: '👥';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.1;
+            right: -50px;
+            top: -50px;
+            transform: rotate(15deg);
+        }
+        
+        .control-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border: 2px solid #fed7aa;
+            margin-bottom: 3rem;
+            transition: all 0.3s ease;
+        }
+        
+        .control-card:hover {
+            box-shadow: 0 12px 30px rgba(249, 115, 22, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .group-card {
+            background: linear-gradient(135deg, white 0%, #fffbf5 100%);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 2px solid #fed7aa;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .group-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, #f97316, #fb923c);
+        }
+        
+        .group-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 24px rgba(249, 115, 22, 0.2);
+            border-color: #fb923c;
+        }
+        
+        .group-card h5 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .group-card h5::before {
+            content: '🎯';
+            font-size: 1.5rem;
+        }
+        
+        .member-item {
+            padding: 0.75rem 1rem;
+            background: white;
+            border-radius: 0.75rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+            border: 1px solid #ffedd5;
+        }
+        
+        .member-item:hover {
+            background: #fff7ed;
+            transform: translateX(5px);
+            border-color: #fed7aa;
+        }
+        
+        .btn-modern-primary {
+            background: linear-gradient(135deg, #f97316, #fb923c);
+            border: none;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+        }
+        
+        .btn-modern-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 1.5rem;
+            border: 2px dashed #fed7aa;
+        }
+        
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+    </style>
 </head>
-<body class="bg-light d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100">
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+<nav class="modern-navbar">
     <div class="container">
-        <a class="navbar-brand" href="/">e-Camp</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
-                aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand fw-bold" href="/">⛺ CampSphere</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbar">
@@ -26,31 +170,47 @@
     </div>
 </nav>
 
-<!-- MAIN CONTENT -->
-<div class="container py-5">
-    <h2 class="mb-4 text-center display-5">👥 Camp Groups</h2>
+<!-- PAGE HEADER -->
+<div class="page-header text-center">
+    <div class="container" style="position: relative; z-index: 1;">
+        <h1 class="display-4 fw-bold mb-2">👥 Manage Groups</h1>
+        <p class="lead mb-0">Generate and view camp groups</p>
+    </div>
+</div>
 
-    <div class="row justify-content-center mb-4">
-        <div class="col-md-6">
-            <label for="campSelect" class="form-label">Select Camp:</label>
-            <select id="campSelect" class="form-select"></select>
+<!-- MAIN CONTENT -->
+<div class="container pb-5">
+    <div class="control-card">
+        <h4 class="fw-bold mb-4" style="color: #f97316;">🎪 Select a Camp</h4>
+        <div class="row align-items-end">
+            <div class="col-md-8 mb-3 mb-md-0">
+                <label class="modern-form-label">Choose Camp</label>
+                <select class="modern-form-control" id="campSelect" style="width: 100%;"></select>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-modern-primary w-100" id="genBtn">🔄 Generate Groups</button>
+            </div>
         </div>
     </div>
 
-    <div class="text-center mb-5">
-        <button id="genBtn" class="btn btn-primary">Generate Groups</button>
+    <h4 class="fw-bold mb-4" style="color: #f97316;">📋 Current Groups</h4>
+    <div class="row" id="groupContainer">
+        <div class="empty-state">
+            <div class="empty-state-icon">👥</div>
+            <p class="text-muted mb-0">Select a camp and generate groups to see them here.</p>
+        </div>
     </div>
 
-    <div id="groupContainer" class="row gy-4"></div>
-
-    <div class="text-center">
-        <a href="/admin-dashboard.html" class="btn btn-outline-primary mt-4">← Back to Dashboard</a>
+    <div class="text-center mt-4">
+        <a href="/admin-dashboard.html" class="btn btn-outline-primary rounded-pill px-4">← Back to Dashboard</a>
     </div>
 </div>
 
 <!-- FOOTER -->
-<footer class="bg-white text-center py-3 mt-auto">
-    <small>© 2025 e-Camp. All rights reserved.</small>
+<footer class="modern-footer mt-auto">
+    <div class="container text-center">
+        <p class="mb-0">© 2025 CampSphere. Making camp memories! ⛺</p>
+    </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -59,43 +219,94 @@
       const res = await fetch("/api/camps", { credentials: "include" });
       if (!res.ok) return location.href = "/admin-login.html";
       const camps = await res.json();
-      const sel = document.getElementById("campSelect");
-      camps.forEach(c => sel.add(new Option(`${c.name}`, c.id)));
-      sel.addEventListener("change", () => loadGroups(sel.value));
+      const select = document.getElementById("campSelect");
+      camps.forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c.id;
+        opt.text = `${c.name} (${c.startDate} - ${c.endDate})`;
+        select.appendChild(opt);
+      });
       if (camps.length) loadGroups(camps[0].id);
+      select.addEventListener("change", e => loadGroups(e.target.value));
     }
 
     async function generateGroups() {
-      const id = document.getElementById("campSelect").value;
-      const res = await fetch(`/api/groups/generate/${id}`, {
-        method: "POST",
-        credentials: "include"
-      });
-      if (!res.ok) return alert("❌ Failed to generate groups");
-      loadGroups(id);
+      const campId = document.getElementById("campSelect").value;
+      if (!campId) return alert("Please select a camp");
+      
+      try {
+        const res = await fetch(`/api/groups/generate/${campId}`, {
+          method: "POST", 
+          credentials: "include"
+        });
+        
+        if (res.status === 401 || res.status === 403) {
+          return location.href = "/admin-login.html";
+        }
+        
+        if (!res.ok) {
+          const errorText = await res.text();
+          alert(`Error generating groups: ${errorText}`);
+          return;
+        }
+        
+        alert("✅ Groups generated successfully!");
+        await loadGroups(campId);
+      } catch (error) {
+        console.error("Error:", error);
+        alert("Failed to generate groups. Please try again.");
+      }
     }
 
     async function loadGroups(campId) {
-      const res = await fetch(`/api/groups/byCamp/${campId}`, {
-        credentials: "include"
-      });
-      if (!res.ok) return location.href = "/admin-login.html";
-      const groups = await res.json();
-      const container = document.getElementById("groupContainer");
-      container.innerHTML = "";
-      groups.forEach(g => {
-        if (!g.children?.length) return;
-        const div = document.createElement("div");
-        div.className = "col-md-6";
-        div.innerHTML = `
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title">${g.groupName}</h5>
-              <ul class="list-unstyled mb-0">${g.children.map(c => `<li>👤 ${c.name} (${c.school})</li>`).join("")}</ul>
+      try {
+        const res = await fetch(`/api/groups/byCamp/${campId}`, {
+          credentials: "include"
+        });
+        
+        if (res.status === 401 || res.status === 403) {
+          return location.href = "/admin-login.html";
+        }
+        
+        if (!res.ok) {
+          console.error("Failed to load groups");
+          return;
+        }
+        
+        const groups = await res.json();
+        const container = document.getElementById("groupContainer");
+        container.innerHTML = "";
+        
+        if (!groups || groups.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">👥</div>
+              <p class="text-muted mb-0">No groups found for this camp. Click "Generate Groups" to create them.</p>
             </div>
-          </div>`;
-        container.appendChild(div);
-      });
+          `;
+          return;
+        }
+        
+        groups.forEach(g => {
+          if (!g.children || g.children.length === 0) return;
+          
+          const div = document.createElement("div");
+          div.className = "col-md-6";
+          
+          const membersHtml = g.children.map(c => 
+            `<li class="member-item">👤 <strong>${c.name}</strong> <span class="text-muted">- ${c.school}</span></li>`
+          ).join("");
+          
+          div.innerHTML = `
+            <div class="group-card">
+              <h5 class="fw-bold mb-3" style="color: #f97316;">${g.groupName}</h5>
+              <ul class="list-unstyled mb-0">${membersHtml}</ul>
+            </div>`;
+          container.appendChild(div);
+        });
+      } catch (error) {
+        console.error("Error loading groups:", error);
+      }
     }
 
     document.getElementById("genBtn").addEventListener("click", generateGroups);
