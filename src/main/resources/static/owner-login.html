@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Owner Login - CampSphere</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="/css/modern-style.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 50%, #c084fc 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/assets/camp-hero.jpg') center/cover no-repeat;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .login-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            padding: 1rem;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, #8b5cf6 0%, #c084fc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+        }
+        
+        .error-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .error-modal.show {
+            display: flex;
+        }
+        
+        .error-modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+        
+        .error-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 3rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Error Modal -->
+<div id="errorModal" class="error-modal">
+    <div class="error-modal-content">
+        <div class="error-icon">✕</div>
+        <h3 class="fw-bold mb-2" style="color: #dc2626;">Login Failed</h3>
+        <p class="text-muted mb-4" id="errorMessage">An error occurred during login.</p>
+        <button onclick="closeErrorModal()" class="btn w-100 py-3" style="background: linear-gradient(135deg, #8b5cf6 0%, #c084fc 100%); color: white; font-weight: 600; border-radius: 50px; border: none;">
+            Try Again
+        </button>
+    </div>
+</div>
+
+<!-- Back to Home Button -->
+<div style="position: absolute; top: 1.5rem; left: 1.5rem; z-index: 10;">
+    <a href="/" class="btn btn-light rounded-pill px-4">
+        ← Back to Home
+    </a>
+</div>
+
+<!-- Login Container -->
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-icon">👑</div>
+        <h2 class="text-center fw-bold mb-2">Owner Portal</h2>
+        <p class="text-center text-muted mb-4">Manage your camp locations</p>
+        
+        <form id="ownerLoginForm">
+            <div class="mb-3">
+                <label for="owner-email" class="modern-form-label">Email Address</label>
+                <input type="email" id="owner-email" name="email" class="modern-form-control" placeholder="owner@campsphere.com" required>
+            </div>
+            <div class="mb-4">
+                <label for="owner-password" class="modern-form-label">Password</label>
+                <input type="password" id="owner-password" name="password" class="modern-form-control" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn w-100 py-3 mb-3" style="background: linear-gradient(135deg, #8b5cf6 0%, #c084fc 100%); color: white; font-weight: 600; border-radius: 50px; border: none; box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);">
+                Access Dashboard
+            </button>
+        </form>
+        
+        <div class="text-center">
+            <p class="text-muted mb-0">
+                <small>Manage camps, activities, and more</small>
+            </p>
+        </div>
+    </div>
+    
+    <div class="text-center mt-4">
+        <p class="text-white mb-2">
+            <small>Need help? Contact support</small>
+        </p>
+    </div>
+</div>
+
+<script>
+    function showErrorModal(message) {
+        document.getElementById("errorMessage").textContent = message;
+        document.getElementById("errorModal").classList.add("show");
+    }
+    
+    function closeErrorModal() {
+        document.getElementById("errorModal").classList.remove("show");
+    }
+    
+    document.getElementById("ownerLoginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const params = new URLSearchParams();
+      params.append("email", form.email.value.trim());
+      params.append("password", form.password.value);
+
+      try {
+        const res = await fetch("/api/auth/owner/login", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: params,
+        });
+
+        if (!res.ok) {
+          const msg = await res.text();
+          showErrorModal(msg || "Owner login failed. Please check your credentials.");
+          return;
+        }
+
+        // Try to parse as JSON, fallback to text
+        let owner;
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          owner = await res.json();
+        } else {
+          // If it's just text (success message), create a minimal owner object
+          const text = await res.text();
+          owner = { email: form.email.value.trim() };
+        }
+        
+        // Set session for navbar
+        sessionStorage.setItem("userRole", "OWNER");
+        sessionStorage.setItem("userName", owner.name || owner.email || "Owner");
+        if (owner.id) sessionStorage.setItem("userId", owner.id);
+
+        window.location.href = "/owner-dashboard.html";
+      } catch (error) {
+        console.error("Login error:", error);
+        showErrorModal("Network error. Please check your connection and try again.");
+      }
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

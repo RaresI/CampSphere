@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CampSphere - Your Ultimate Camp Management Platform</title>
+    
+    <!-- BOOTSTRAP CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- MODERN STYLES -->
+    <link href="/css/modern-style.css" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/assets/camp-hero.jpg') center/cover no-repeat;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .portal-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            height: 100%;
+        }
+        
+        .portal-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-blue-light);
+        }
+        
+        .portal-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .icon-parent { background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%); }
+        .icon-child { background: linear-gradient(135deg, #10b981 0%, #34d399 100%); }
+        .icon-admin { background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); }
+        .icon-owner { background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%); }
+        
+        .features-section {
+            padding: 6rem 0;
+            background: white;
+        }
+        
+        .feature-box {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            color: white;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+            padding: 4rem 0;
+            color: white;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+    </style>
+</head>
+<body>
+
+<!-- MODERN NAVBAR -->
+<nav class="modern-navbar">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="/">⛺ CampSphere</a>
+            <div class="d-flex gap-3">
+                <a href="/login-child.html" class="btn btn-modern-outline btn-sm">Child Login</a>
+                <a href="/parent-login.html" class="btn btn-modern-primary btn-sm">Parent Login</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero-gradient d-flex align-items-center">
+    <div class="container hero-content">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-white mb-5 mb-lg-0">
+                <div class="fade-in-up">
+                    <h1 class="display-3 fw-bold mb-4" style="letter-spacing: -0.02em;">
+                        Welcome to<br>
+                        <span style="font-size: 4.5rem;">CampSphere</span>
+                    </h1>
+                    <p class="lead fs-4 mb-4" style="opacity: 0.95;">
+                        Your ultimate camp management platform. Manage camps, registrations, schedules, and activities—all in one beautiful place.
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="/parent-register.html" class="btn btn-light btn-lg px-4 py-3 rounded-pill fw-semibold">
+                            Get Started Free
+                        </a>
+                        <a href="#portals" class="btn btn-outline-light btn-lg px-4 py-3 rounded-pill fw-semibold">
+                            Explore Portals
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="portal-cards-grid">
+                    <!-- This space for visual balance -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PORTALS SECTION -->
+<section class="py-5" style="background: #f9fafb; margin-top: -3rem;" id="portals">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold text-gradient mb-3">Choose Your Portal</h2>
+            <p class="lead text-muted">Access the right tools for your role</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Parent Portal -->
+            <div class="col-md-6 col-lg-3">
+                <a href="/parent-login.html" class="text-decoration-none">
+                    <div class="portal-card">
+                        <div class="portal-icon icon-parent">👨‍👩‍👧‍👦</div>
+                        <h3 class="h4 fw-bold text-center mb-3">Parent Portal</h3>
+                        <p class="text-muted text-center mb-0">
+                            Register children, view schedules, and track camp activities
+                        </p>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Child Portal -->
+            <div class="col-md-6 col-lg-3">
+                <a href="/login-child.html" class="text-decoration-none">
+                    <div class="portal-card">
+                        <div class="portal-icon icon-child">🧒</div>
+                        <h3 class="h4 fw-bold text-center mb-3">Child Portal</h3>
+                        <p class="text-muted text-center mb-0">
+                            View your schedule, groups, and share camp feedback
+                        </p>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Admin Portal -->
+            <div class="col-md-6 col-lg-3">
+                <a href="/admin-login.html" class="text-decoration-none">
+                    <div class="portal-card">
+                        <div class="portal-icon icon-admin">👔</div>
+                        <h3 class="h4 fw-bold text-center mb-3">Admin Portal</h3>
+                        <p class="text-muted text-center mb-0">
+                            Manage camps, groups, costs, and daily operations
+                        </p>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- Owner Portal -->
+            <div class="col-md-6 col-lg-3">
+                <a href="/owner-login.html" class="text-decoration-none">
+                    <div class="portal-card">
+                        <div class="portal-icon icon-owner">👑</div>
+                        <h3 class="h4 fw-bold text-center mb-3">Owner Portal</h3>
+                        <p class="text-muted text-center mb-0">
+                            Oversee all camps, manage activities and leaderboards
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES SECTION -->
+<section class="features-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Powerful Features</h2>
+            <p class="lead text-muted">Everything you need to run successful camps</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon">📅</div>
+                    <h3 class="h5 fw-bold mb-3">Schedule Management</h3>
+                    <p class="text-muted">Organize daily activities, assign groups, and track progress effortlessly</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon">👥</div>
+                    <h3 class="h5 fw-bold mb-3">Smart Groups</h3>
+                    <p class="text-muted">Automatically generate balanced groups based on schools and preferences</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon">⭐</div>
+                    <h3 class="h5 fw-bold mb-3">Feedback & Ratings</h3>
+                    <p class="text-muted">Collect valuable feedback and track satisfaction across all camps</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon">🏆</div>
+                    <h3 class="h5 fw-bold mb-3">Leaderboards</h3>
+                    <p class="text-muted">Gamify camp activities with scoring and team competitions</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon">💰</div>
+                    <h3 class="h5 fw-bold mb-3">Cost Tracking</h3>
+                    <p class="text-muted">Monitor expenses, registrations, and financial summaries in real-time</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="h5 fw-bold mb-3">Analytics Dashboard</h3>
+                    <p class="text-muted">Get insights with comprehensive reports and visual data</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- STATS SECTION -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-6">
+                <div class="stat-box">
+                    <span class="stat-number">6+</span>
+                    <span class="stat-label">Active Camps</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-box">
+                    <span class="stat-number">43+</span>
+                    <span class="stat-label">Happy Campers</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-box">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Satisfaction</span>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-box">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Support</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MODERN FOOTER -->
+<footer class="modern-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <h5 class="fw-bold text-white mb-3">⛺ CampSphere</h5>
+                <p class="text-muted">Your ultimate camp management platform for modern camp organizers.</p>
+            </div>
+            <div class="col-lg-2 col-6 mb-4 mb-lg-0">
+                <h6 class="fw-bold text-white mb-3">Portals</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="/parent-login.html" class="text-decoration-none">Parents</a></li>
+                    <li class="mb-2"><a href="/login-child.html" class="text-decoration-none">Children</a></li>
+                    <li class="mb-2"><a href="/admin-login.html" class="text-decoration-none">Admins</a></li>
+                    <li class="mb-2"><a href="/owner-login.html" class="text-decoration-none">Owners</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-6 mb-4 mb-lg-0">
+                <h6 class="fw-bold text-white mb-3">Features</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="text-decoration-none">Schedules</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none">Groups</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none">Feedback</a></li>
+                    <li class="mb-2"><a href="#" class="text-decoration-none">Analytics</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <h6 class="fw-bold text-white mb-3">Get Started</h6>
+                <p class="text-muted mb-3">Join CampSphere today and transform your camp management experience.</p>
+                <a href="/parent-register.html" class="btn btn-modern-primary">Register Now</a>
+            </div>
+        </div>
+        <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+        <div class="text-center">
+            <small>© 2025 CampSphere. All rights reserved. Made with ❤️ for amazing camps.</small>
+        </div>
+    </div>
+</footer>
+
+<!-- BOOTSTRAP JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

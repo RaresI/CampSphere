@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register a Child</title>
+</head>
+<body>
+<h2>Register Your Child</h2>
+<form id="childForm">
+  <input type="text" name="name" placeholder="Child Name" required><br>
+  <input type="text" name="dateOfBirth" placeholder="Date of Birth (YYYY-MM-DD)" required><br>
+  <input type="text" name="school" placeholder="School" required><br>
+  <input type="text" name="medicalInfo" placeholder="Medical Info"><br>
+
+  <label for="parentSelect">Select Parent:</label><br>
+  <select id="parentSelect" required>
+    <option value="">-- Select a Parent --</option>
+  </select><br><br>
+
+  <button type="submit">Register Child</button>
+</form>
+
+<script>
+  // Load all parents into dropdown
+  async function loadParents() {
+    try {
+      const res = await fetch("/api/parents");
+      const parents = await res.json();
+      const select = document.getElementById("parentSelect");
+
+      parents.forEach(p => {
+        const option = document.createElement("option");
+        option.value = p.id;
+        option.text = `${p.name} (${p.email})`;
+        select.appendChild(option);
+      });
+    } catch (err) {
+      alert("Failed to load parents");
+      console.error(err);
+    }
+  }
+
+  // Handle form submission
+  document.getElementById("childForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const form = e.target;
+
+    const data = {
+      name: form.name.value,
+      dateOfBirth: form.dateOfBirth.value,
+      school: form.school.value,
+      medicalInfo: form.medicalInfo.value,
+      parent: { id: document.getElementById("parentSelect").value }
+    };
+
+    const res = await fetch("/api/children", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    if (res.ok) {
+      alert("Child registered successfully!");
+      form.reset();
+    } else {
+      const error = await res.text();
+      alert("Error: " + error);
+    }
+  });
+
+  // Run on load
+  loadParents();
+</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login as Parent</title>
+</head>
+<body>
+<h2>Parent Login</h2>
+<form id="loginForm">
+    <input type="email" placeholder="Email" name="email" required><br>
+    <input type="text" placeholder="Phone" name="phone" required><br>
+    <button type="submit">Login</button>
+</form>
+
+<script>
+    document.getElementById("loginForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const params = new URLSearchParams();
+      params.append("email", form.email.value);
+      params.append("phone", form.phone.value);
+
+      const res = await fetch("/api/parents/login?" + params.toString(), {
+        method: "POST"
+      });
+
+      const text = await res.text();
+      alert(text);
+    });
+</script>
+</body>
+</html>

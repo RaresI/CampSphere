@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Child Login - CampSphere</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="/css/modern-style.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #10b981 0%, #14b8a6 50%, #34d399 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/assets/camp-hero.jpg') center/cover no-repeat;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .login-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+            padding: 1rem;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .success-modal, .error-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .success-modal.show, .error-modal.show {
+            display: flex;
+        }
+        
+        .success-modal-content, .error-modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 3rem;
+        }
+        
+        .error-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 3rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Success Modal -->
+<div id="successModal" class="success-modal">
+    <div class="success-modal-content">
+        <div class="success-icon">✓</div>
+        <h3 class="fw-bold mb-2" style="color: #059669;">Welcome Back, Camper!</h3>
+        <p class="text-muted mb-4" id="successMessage">Login successful! Let's start your adventure!</p>
+        <button onclick="goToFeedback()" class="btn w-100 py-3" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: white; font-weight: 600; border-radius: 50px; border: none;">
+            Continue 🎒
+        </button>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div id="errorModal" class="error-modal">
+    <div class="error-modal-content">
+        <div class="error-icon">✕</div>
+        <h3 class="fw-bold mb-2" style="color: #dc2626;">Login Failed</h3>
+        <p class="text-muted mb-4" id="errorMessage">An error occurred during login.</p>
+        <button onclick="closeErrorModal()" class="btn w-100 py-3" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: white; font-weight: 600; border-radius: 50px; border: none;">
+            Try Again
+        </button>
+    </div>
+</div>
+
+<!-- Back to Home Button -->
+<div style="position: absolute; top: 1.5rem; left: 1.5rem; z-index: 10;">
+    <a href="/" class="btn btn-light rounded-pill px-4">
+        ← Back to Home
+    </a>
+</div>
+
+<!-- Login Container -->
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-icon">🧒</div>
+        <h2 class="text-center fw-bold mb-2">Welcome, Camper!</h2>
+        <p class="text-center text-muted mb-4">Login to see your camp adventures</p>
+        
+        <form id="childLoginForm">
+            <div class="mb-3">
+                <label for="child-email" class="modern-form-label">Your Email</label>
+                <input type="email" id="child-email" name="email" class="modern-form-control" placeholder="your.email@example.com" required>
+            </div>
+            <div class="mb-4">
+                <label for="child-password" class="modern-form-label">Password</label>
+                <input type="password" id="child-password" name="password" class="modern-form-control" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn w-100 py-3 mb-3" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: white; font-weight: 600; border-radius: 50px; border: none; box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);">
+                Start Your Adventure! 🎒
+            </button>
+        </form>
+        
+        <div class="text-center">
+            <p class="text-muted mb-0">
+                <small>🌟 Have fun and stay safe!</small>
+            </p>
+        </div>
+    </div>
+    
+    <div class="text-center mt-4">
+        <p class="text-white mb-2">
+            <small>Need help? Ask your parents!</small>
+        </p>
+    </div>
+</div>
+
+<script>
+    function showSuccessModal(message) {
+        document.getElementById("successMessage").textContent = message;
+        document.getElementById("successModal").classList.add("show");
+    }
+    
+    function showErrorModal(message) {
+        document.getElementById("errorMessage").textContent = message;
+        document.getElementById("errorModal").classList.add("show");
+    }
+    
+    function closeErrorModal() {
+        document.getElementById("errorModal").classList.remove("show");
+    }
+    
+    function goToFeedback() {
+        window.location.href = "/child-feedback.html";
+    }
+    
+    document.getElementById("childLoginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const email = form.email.value.trim();
+      const password = form.password.value;
+
+      const params = new URLSearchParams({ email, password });
+
+      try {
+        const res = await fetch("/api/auth/child/login?" + params.toString(), {
+          method: "POST",
+          credentials: "include"
+        });
+
+        const text = await res.text();
+
+        if (res.ok) {
+          localStorage.setItem("childEmail", email);
+          
+          // Set session for navbar
+          sessionStorage.setItem("userRole", "CHILD");
+          sessionStorage.setItem("userName", email.split('@')[0]); // Use email username as name
+          sessionStorage.setItem("userEmail", email);
+          
+          showSuccessModal(text || "Login successful! Let's start your adventure!");
+        } else {
+          showErrorModal(text || "Login failed. Please check your email and password.");
+        }
+      } catch (err) {
+        showErrorModal("Network error. Please check your connection and try again.");
+        console.error(err);
+      }
+    });
+</script>
+</body>
+</html>

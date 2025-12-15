@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Camp Leaderboard</title>
+</head>
+<body>
+<h2>Leaderboard</h2>
+
+<label for="campSelect">Select Camp:</label>
+<select id="campSelect"></select>
+
+<table border="1" style="margin-top:10px;">
+  <thead>
+  <tr>
+    <th>Rank</th>
+    <th>Group</th>
+    <th>Total Points</th>
+  </tr>
+  </thead>
+  <tbody id="leaderboardBody"></tbody>
+</table>
+
+<script>
+  async function loadCamps() {
+    const res = await fetch("/api/camps");
+    const camps = await res.json();
+    const select = document.getElementById("campSelect");
+
+    camps.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c.id;
+      opt.text = `${c.name} (${c.startDate} - ${c.endDate})`;
+      select.appendChild(opt);
+    });
+
+    if (camps.length > 0) loadLeaderboard(camps[0].id);
+  }
+
+  async function loadLeaderboard(campId) {
+    const res = await fetch(`/api/scores/byCamp/${campId}`);
+    const scores = await res.json();
+    const tbody = document.getElementById("leaderboardBody");
+    tbody.innerHTML = "";
+
+    scores.forEach((entry, index) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${entry.groupName}</td>
+        <td>${entry.totalPoints}</td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  document.getElementById("campSelect").addEventListener("change", e => {
+    loadLeaderboard(e.target.value);
+  });
+
+  loadCamps();
+</script>
+</body>
+</html>

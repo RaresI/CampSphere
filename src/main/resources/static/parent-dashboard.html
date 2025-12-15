@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Parent Dashboard - CampSphere</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="/css/modern-style.css" rel="stylesheet">
+    <link href="/css/navbar.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            min-height: 100vh;
+            padding-top: 0;
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 2px solid #dbeafe;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            display: block;
+            height: 100%;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.15);
+            border-color: #3b82f6;
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+        }
+        
+        .registrations-section {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 2px solid #dbeafe;
+            margin-top: 2rem;
+        }
+        
+        .registration-item {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+        
+        .registration-item:hover {
+            background: #eff6ff;
+            transform: translateX(5px);
+        }
+        
+        .badge-camp {
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .badge-trip {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+            display: inline-block;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<!-- NAVBAR -->
+<div id="navbar-container"></div>
+
+<!-- PAGE HEADER -->
+<div class="page-header text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-2">👪 Parent Dashboard</h1>
+        <p class="lead mb-0">Manage your children and camp registrations</p>
+    </div>
+</div>
+
+<!-- DASHBOARD -->
+<section class="container pb-5">
+    <div class="row g-4 justify-content-center" style="max-width: 900px; margin: 0 auto;">
+        <div class="col-md-6">
+            <a href="/parent-children.html" class="dashboard-card">
+                <div class="card-icon">
+                    👶
+                </div>
+                <h4 class="fw-bold mb-2">Manage My Children</h4>
+                <p class="text-muted mb-0">Add, view or edit your children's information and profiles.</p>
+            </a>
+        </div>
+
+        <div class="col-md-6">
+            <a href="/parent-registrations.html" class="dashboard-card">
+                <div class="card-icon">
+                    📅
+                </div>
+                <h4 class="fw-bold mb-2">Camp Registration</h4>
+                <p class="text-muted mb-0">Register your children for camps and optional trips.</p>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Children's Camp Registrations -->
+    <div class="registrations-section" style="max-width: 900px; margin: 2rem auto 0;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h3 class="fw-bold mb-1">🏕️ Active Camp Registrations</h3>
+                <p class="text-muted mb-0">View your children's upcoming camps</p>
+            </div>
+            <span class="badge-camp" id="registrationCount">Loading...</span>
+        </div>
+        
+        <div id="registrationsList">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="text-muted mt-3">Loading registrations...</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="modern-footer mt-auto">
+    <div class="container text-center">
+        <p class="mb-0">© 2025 CampSphere. Making camp memories! ⛺</p>
+    </div>
+</footer>
+
+<script>
+    const parentId = +localStorage.getItem("parentId");
+    if (!parentId) {
+        location.href = "/parent-login.html";
+    }
+    
+    async function loadRegistrations() {
+        try {
+            // Load all data in parallel
+            const [childrenRes, registrationsRes, campsRes, tripsRes] = await Promise.all([
+                fetch("/api/children"),
+                fetch("/api/registrations"),
+                fetch("/api/camps"),
+                fetch("/api/trips")
+            ]);
+            
+            const allChildren = await childrenRes.json();
+            const allRegistrations = await registrationsRes.json();
+            const allCamps = await campsRes.json();
+            const allTrips = await tripsRes.json();
+            
+            // Filter to get only this parent's children
+            const myChildren = allChildren.filter(c => c.parentId === parentId);
+            const myChildIds = myChildren.map(c => c.id);
+            
+            // Filter registrations for this parent's children
+            const myRegistrations = allRegistrations.filter(r => 
+                myChildIds.includes(r.child?.id)
+            );
+            
+            // Update count badge
+            const countBadge = document.getElementById("registrationCount");
+            countBadge.textContent = myRegistrations.length === 1 
+                ? "1 Registration" 
+                : `${myRegistrations.length} Registrations`;
+            
+            // Display registrations
+            const listContainer = document.getElementById("registrationsList");
+            
+            if (myRegistrations.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-5">
+                        <div style="font-size: 4rem; opacity: 0.3;">🏕️</div>
+                        <h5 class="fw-bold text-muted mt-3">No Camp Registrations Yet</h5>
+                        <p class="text-muted mb-3">Register your children for camps to see them here.</p>
+                        <a href="/parent-registrations.html" class="btn btn-modern-primary px-4">
+                            Register for a Camp
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            listContainer.innerHTML = "";
+            
+            myRegistrations.forEach(reg => {
+                const child = myChildren.find(c => c.id === reg.child?.id);
+                const camp = allCamps.find(c => c.id === reg.camp?.id);
+                
+                if (!child || !camp) return;
+                
+                // Get trip names if any
+                let tripsHtml = "";
+                if (reg.trips && reg.trips.length > 0) {
+                    const tripNames = reg.trips.map(trip => {
+                        // trip is now an object, not an ID
+                        return trip.name || "Unknown Trip";
+                    });
+                    
+                    tripsHtml = `
+                        <div class="mt-2">
+                            <small class="text-muted d-block mb-1">Optional Trips:</small>
+                            ${tripNames.map(name => `<span class="badge-trip">🎒 ${name}</span>`).join("")}
+                        </div>
+                    `;
+                }
+                
+                // Format registration date
+                let dateText = "Recently registered";
+                if (reg.registrationDate) {
+                    const regDate = new Date(reg.registrationDate);
+                    dateText = regDate.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    });
+                }
+                
+                const statusColor = reg.status === "CONFIRMED" ? "#10b981" : 
+                                   reg.status === "PENDING" ? "#f59e0b" : "#6b7280";
+                
+                const item = document.createElement("div");
+                item.className = "registration-item";
+                item.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-start flex-wrap">
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold mb-1">
+                                <span style="font-size: 1.25rem;">👶</span> ${child.name}
+                            </h5>
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="fw-semibold text-primary" style="font-size: 1.1rem;">
+                                    🏕️ ${camp.name}
+                                </span>
+                                <span style="background: ${statusColor}; color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600;">
+                                    ${reg.status || "PENDING"}
+                                </span>
+                            </div>
+                            <small class="text-muted">📅 Registered: ${dateText}</small>
+                            ${tripsHtml}
+                        </div>
+                    </div>
+                `;
+                
+                listContainer.appendChild(item);
+            });
+            
+        } catch (error) {
+            console.error("Error loading registrations:", error);
+            const listContainer = document.getElementById("registrationsList");
+            listContainer.innerHTML = `
+                <div class="text-center py-5">
+                    <div style="font-size: 3rem; opacity: 0.5;">⚠️</div>
+                    <p class="text-muted mt-3">Failed to load registrations. Please refresh the page.</p>
+                </div>
+            `;
+            
+            const countBadge = document.getElementById("registrationCount");
+            countBadge.textContent = "Error";
+        }
+    }
+    
+    // Load registrations when page loads
+    loadRegistrations();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/navbar.js"></script>
+</body>
+</html>
+

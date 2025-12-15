@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Camp Groups</title>
+</head>
+<body>
+<h2>Groups by Camp</h2>
+<select id="campSelect"></select>
+<button onclick="generateGroups()">Generate Groups</button>
+<div id="groupContainer"></div>
+
+<script>
+  async function loadCamps() {
+    const res = await fetch("/api/camps");
+    const camps = await res.json();
+    const select = document.getElementById("campSelect");
+
+    camps.forEach(camp => {
+      const option = document.createElement("option");
+      option.value = camp.id;
+      option.text = `${camp.name} (${camp.startDate} - ${camp.endDate})`;
+      select.appendChild(option);
+    });
+
+    // Load groups for the first camp by default
+    if (camps.length > 0) loadGroups(camps[0].id);
+  }
+
+  async function generateGroups() {
+    const campId = document.getElementById("campSelect").value;
+    await fetch(`/api/groups/generate/${campId}`, { method: "POST" });
+    await loadGroups(campId); // Reload after generation
+  }
+
+  async function loadGroups(campId) {
+    const res = await fetch(`/api/groups/byCamp/${campId}`);
+    const groups = await res.json();
+
+    const container = document.getElementById("groupContainer");
+    container.innerHTML = ""; // Clear previous
+
+    groups.forEach(group => {
+      if (!group.children || group.children.length === 0) return; // ✅ Skip empty groups
+
+      const div = document.createElement("div");
+      div.innerHTML = `<h3>${group.groupName}</h3><ul></ul>`;
+      const ul = div.querySelector("ul");
+
+      group.children.forEach(child => {
+        if (child && child.name && child.school) {
+          const li = document.createElement("li");
+          li.innerText = `${child.name} (${child.school})`;
+          ul.appendChild(li);
+        }
+      });
+
+      container.appendChild(div);
+    });
+  }
+
+  document.getElementById("campSelect").addEventListener("change", e => {
+    loadGroups(e.target.value);
+  });
+
+  loadCamps();
+</script>
+</body>
+</html>

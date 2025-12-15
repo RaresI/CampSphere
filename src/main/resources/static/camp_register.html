@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register Child for Camp</title>
+</head>
+<body>
+<h2>Register Child for a Camp</h2>
+
+<form id="registrationForm">
+  <label for="childId">Child ID:</label><br>
+  <input type="number" id="childId" required><br>
+
+  <label for="campSelect">Select Camp:</label><br>
+  <select id="campSelect" required></select><br>
+
+  <label for="tripSelect">Optional Trips:</label><br>
+  <div id="tripSelect"></div><br>
+
+  <button type="submit">Submit Registration</button>
+</form>
+
+<script>
+  async function loadCamps() {
+    const res = await fetch("/api/camps");
+    const camps = await res.json();
+    const select = document.getElementById("campSelect");
+
+    camps.forEach(camp => {
+      const option = document.createElement("option");
+      option.value = camp.id;
+      option.text = `${camp.name} (${camp.startDate} - ${camp.endDate})`;
+      select.appendChild(option);
+    });
+  }
+
+  async function loadTrips(campId) {
+  console.log("Fetching trips for campId:", campId); // ✅ debug
+  try {
+    const res = await fetch(`/api/trips/byCamp/${campId}`);
+    if (!res.ok) throw new Error("Failed to fetch trips");
+    const trips = await res.json();
+    console.log("Trips received:", trips); // ✅ debug
+
+    const container = document.getElementById("tripSelect");
+    container.innerHTML = "";
+
+    if (trips.length === 0) {
+      container.innerHTML = "<i>No optional trips available for this camp.</i>";
+    }
+
+    trips.forEach(trip => {
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.value = trip.id;
+      checkbox.name = "trip";
+      container.appendChild(checkbox);
+      container.appendChild(document.createTextNode(" " + trip.name));
+      container.appendChild(document.createElement("br"));
+    });
+
+  } catch (err) {
+    console.error("Error loading trips:", err); // ✅ debug
+  }
+}
+
+
+  document.getElementById("campSelect").addEventListener("change", e => {
+    const campId = e.target.value;
+    if (campId) loadTrips(campId);
+  });
+
+  document.getElementById("registrationForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const childId = document.getElementById("childId").value;
+    const campId = document.getElementById("campSelect").value;
+    const trips = [...document.querySelectorAll('input[name="trip"]:checked')]
+                      .map(cb => parseInt(cb.value));
+
+    const payload = {
+      childId: parseInt(childId),
+      campId: parseInt(campId),
+      tripIds: trips
+    };
+
+    const res = await fetch("/api/registrations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      alert("Registration successful!");
+      e.target.reset();
+      document.getElementById("tripSelect").innerHTML = "";
+    } else {
+      const error = await res.text();
+      alert("Error: " + error);
+    }
+  });
+
+  loadCamps();
+</script>
+</body>
+</html>

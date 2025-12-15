@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Assign Daily Activity</title>
+</head>
+<body>
+<h2>Assign Activity to Schedule</h2>
+
+<form id="scheduleForm">
+  <label for="campSelect">Camp:</label><br>
+  <select id="campSelect"></select><br><br>
+
+  <label for="groupSelect">Group:</label><br>
+  <select id="groupSelect"></select><br><br>
+
+  <label for="activitySelect">Activity:</label><br>
+  <select id="activitySelect"></select><br><br>
+
+  <label for="instructorSelect">Instructor:</label><br>
+  <select id="instructorSelect"></select><br><br>
+
+  <label for="date">Date:</label><br>
+  <input type="date" id="date"><br><br>
+
+  <label for="startTime">Start Time:</label><br>
+  <input type="time" id="startTime"><br><br>
+
+  <label for="endTime">End Time:</label><br>
+  <input type="time" id="endTime"><br><br>
+
+  <button type="submit">Assign</button>
+</form>
+
+<script>
+  async function loadData() {
+    const [camps, instructors] = await Promise.all([
+      fetch("/api/camps").then(res => res.json()),
+      fetch("/api/instructors").then(res => res.json())
+    ]);
+
+    const campSelect = document.getElementById("campSelect");
+    camps.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c.id;
+      opt.text = c.name;
+      campSelect.appendChild(opt);
+    });
+
+    const instrSelect = document.getElementById("instructorSelect");
+    instructors.forEach(i => {
+      const opt = document.createElement("option");
+      opt.value = i.id;
+      opt.text = i.name + " - " + i.expertise;
+      instrSelect.appendChild(opt);
+    });
+
+    if (camps.length > 0) {
+      loadGroupsAndActivities(camps[0].id);
+    }
+
+    campSelect.addEventListener("change", e => {
+      loadGroupsAndActivities(e.target.value);
+    });
+  }
+
+  async function loadGroupsAndActivities(campId) {
+    const [groups, activities] = await Promise.all([
+      fetch(`/api/groups/byCamp/${campId}`).then(res => res.json()),
+      fetch(`/api/activities/byCamp/${campId}`).then(res => res.json())
+    ]);
+
+    const groupSelect = document.getElementById("groupSelect");
+    groupSelect.innerHTML = "";
+    groups.forEach(g => {
+      const opt = document.createElement("option");
+      opt.value = g.id;
+      opt.text = g.groupName;
+      groupSelect.appendChild(opt);
+    });
+
+    const activitySelect = document.getElementById("activitySelect");
+    activitySelect.innerHTML = "";
+    activities.forEach(a => {
+      const opt = document.createElement("option");
+      opt.value = a.id;
+      opt.text = a.name;
+      activitySelect.appendChild(opt);
+    });
+  }
+
+  document.getElementById("scheduleForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const data = {
+      camp: { id: parseInt(document.getElementById("campSelect").value) },
+      group: { id: parseInt(document.getElementById("groupSelect").value) },
+      activity: { id: parseInt(document.getElementById("activitySelect").value) },
+      instructorId: parseInt(document.getElementById("instructorSelect").value),
+      date: document.getElementById("date").value,
+      startTime: document.getElementById("startTime").value,
+      endTime: document.getElementById("endTime").value
+    };
+
+    console.log("Submitting schedule:", data);
+
+    const res = await fetch("/api/schedules", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    if (res.ok) {
+      alert("Schedule assigned successfully!");
+      e.target.reset();
+    } else {
+      const err = await res.text();
+      alert("Error: " + err);
+      console.error(err);
+    }
+  });
+
+  loadData();
+</script>
+</body>
+</html>

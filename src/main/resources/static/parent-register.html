@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Parent Registration - CampSphere</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="/css/modern-style.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/assets/camp-hero.jpg') center/cover no-repeat;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .register-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 520px;
+            padding: 1rem;
+        }
+        
+        .register-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        
+        .register-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .success-modal.show {
+            display: flex;
+        }
+        
+        .success-modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 3rem;
+            animation: checkBounce 0.6s ease;
+        }
+        
+        .error-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .error-modal.show {
+            display: flex;
+        }
+        
+        .error-modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 2.5rem;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+        
+        .error-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 3rem;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes checkBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Success Modal -->
+<div id="successModal" class="success-modal">
+    <div class="success-modal-content">
+        <div class="success-icon">✓</div>
+        <h3 class="fw-bold mb-2" style="color: #059669;">Registration Successful!</h3>
+        <p class="text-muted mb-4">Your account has been created successfully. You can now log in to access your dashboard.</p>
+        <button onclick="goToLogin()" class="btn btn-modern-primary w-100 py-3">
+            Continue to Login
+        </button>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div id="errorModal" class="error-modal">
+    <div class="error-modal-content">
+        <div class="error-icon">✕</div>
+        <h3 class="fw-bold mb-2" style="color: #dc2626;">Registration Failed</h3>
+        <p class="text-muted mb-4" id="errorMessage">An error occurred during registration.</p>
+        <button onclick="closeErrorModal()" class="btn btn-modern-primary w-100 py-3">
+            Try Again
+        </button>
+    </div>
+</div>
+
+<!-- Back to Home Button -->
+<div style="position: absolute; top: 1.5rem; left: 1.5rem; z-index: 10;">
+    <a href="/" class="btn btn-light rounded-pill px-4">
+        ← Back to Home
+    </a>
+</div>
+
+<!-- Register Container -->
+<div class="register-container">
+    <div class="register-card">
+        <div class="register-icon">📝</div>
+        <h2 class="text-center fw-bold mb-2">Parent Registration</h2>
+        <p class="text-center text-muted mb-4">Join CampSphere and manage your children's camps!</p>
+        
+        <form id="regForm">
+            <div class="mb-3">
+                <label for="name" class="modern-form-label">Full Name</label>
+                <input type="text" id="name" class="modern-form-control" placeholder="John Doe" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="modern-form-label">Email Address</label>
+                <input type="email" id="email" class="modern-form-control" placeholder="your.email@example.com" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="modern-form-label">Phone Number</label>
+                <div class="input-group">
+                    <select id="countryCode" class="form-select" style="max-width: 140px; border-radius: 0.75rem 0 0 0.75rem;">
+                        <option value="+93">🇦🇫 +93</option>
+                        <option value="+355">🇦🇱 +355</option>
+                        <option value="+213">🇩🇿 +213</option>
+                        <option value="+376">🇦🇩 +376</option>
+                        <option value="+244">🇦🇴 +244</option>
+                        <option value="+54">🇦🇷 +54</option>
+                        <option value="+374">🇦🇲 +374</option>
+                        <option value="+61">🇦🇺 +61</option>
+                        <option value="+43">🇦🇹 +43</option>
+                        <option value="+994">🇦🇿 +994</option>
+                        <option value="+973">🇧🇭 +973</option>
+                        <option value="+880">🇧🇩 +880</option>
+                        <option value="+375">🇧🇾 +375</option>
+                        <option value="+32">🇧🇪 +32</option>
+                        <option value="+501">🇧🇿 +501</option>
+                        <option value="+229">🇧🇯 +229</option>
+                        <option value="+975">🇧🇹 +975</option>
+                        <option value="+591">🇧🇴 +591</option>
+                        <option value="+387">🇧🇦 +387</option>
+                        <option value="+267">🇧🇼 +267</option>
+                        <option value="+55">🇧🇷 +55</option>
+                        <option value="+673">🇧🇳 +673</option>
+                        <option value="+359">🇧🇬 +359</option>
+                        <option value="+226">🇧🇫 +226</option>
+                        <option value="+257">🇧🇮 +257</option>
+                        <option value="+855">🇰🇭 +855</option>
+                        <option value="+237">🇨🇲 +237</option>
+                        <option value="+1">🇨🇦 +1</option>
+                        <option value="+238">🇨🇻 +238</option>
+                        <option value="+236">🇨🇫 +236</option>
+                        <option value="+235">🇹🇩 +235</option>
+                        <option value="+56">🇨🇱 +56</option>
+                        <option value="+86">🇨🇳 +86</option>
+                        <option value="+57">🇨🇴 +57</option>
+                        <option value="+269">🇰🇲 +269</option>
+                        <option value="+506">🇨🇷 +506</option>
+                        <option value="+385">🇭🇷 +385</option>
+                        <option value="+53">🇨🇺 +53</option>
+                        <option value="+357">🇨🇾 +357</option>
+                        <option value="+420">🇨🇿 +420</option>
+                        <option value="+45">🇩🇰 +45</option>
+                        <option value="+253">🇩🇯 +253</option>
+                        <option value="+593">🇪🇨 +593</option>
+                        <option value="+20">🇪🇬 +20</option>
+                        <option value="+503">🇸🇻 +503</option>
+                        <option value="+240">🇬🇶 +240</option>
+                        <option value="+372">🇪🇪 +372</option>
+                        <option value="+251">🇪🇹 +251</option>
+                        <option value="+358">🇫🇮 +358</option>
+                        <option value="+33">🇫🇷 +33</option>
+                        <option value="+241">🇬🇦 +241</option>
+                        <option value="+220">🇬🇲 +220</option>
+                        <option value="+995">🇬🇪 +995</option>
+                        <option value="+49">🇩🇪 +49</option>
+                        <option value="+233">🇬🇭 +233</option>
+                        <option value="+30">🇬🇷 +30</option>
+                        <option value="+502">🇬🇹 +502</option>
+                        <option value="+224">🇬🇳 +224</option>
+                        <option value="+245">🇬🇼 +245</option>
+                        <option value="+509">🇭🇹 +509</option>
+                        <option value="+504">🇭🇳 +504</option>
+                        <option value="+852">🇭🇰 +852</option>
+                        <option value="+36">🇭🇺 +36</option>
+                        <option value="+354">🇮🇸 +354</option>
+                        <option value="+91">🇮🇳 +91</option>
+                        <option value="+62">🇮🇩 +62</option>
+                        <option value="+98">🇮🇷 +98</option>
+                        <option value="+964">🇮🇶 +964</option>
+                        <option value="+353">🇮🇪 +353</option>
+                        <option value="+972">🇮🇱 +972</option>
+                        <option value="+39">🇮🇹 +39</option>
+                        <option value="+81">🇯🇵 +81</option>
+                        <option value="+962">🇯🇴 +962</option>
+                        <option value="+7">🇰🇿 +7</option>
+                        <option value="+254">🇰🇪 +254</option>
+                        <option value="+965">🇰🇼 +965</option>
+                        <option value="+996">🇰🇬 +996</option>
+                        <option value="+856">🇱🇦 +856</option>
+                        <option value="+371">🇱🇻 +371</option>
+                        <option value="+961">🇱🇧 +961</option>
+                        <option value="+266">🇱🇸 +266</option>
+                        <option value="+231">🇱🇷 +231</option>
+                        <option value="+218">🇱🇾 +218</option>
+                        <option value="+423">🇱🇮 +423</option>
+                        <option value="+370">🇱🇹 +370</option>
+                        <option value="+352">🇱🇺 +352</option>
+                        <option value="+853">🇲🇴 +853</option>
+                        <option value="+389">🇲🇰 +389</option>
+                        <option value="+261">🇲🇬 +261</option>
+                        <option value="+265">🇲🇼 +265</option>
+                        <option value="+60">🇲🇾 +60</option>
+                        <option value="+960">🇲🇻 +960</option>
+                        <option value="+223">🇲🇱 +223</option>
+                        <option value="+356">🇲🇹 +356</option>
+                        <option value="+222">🇲🇷 +222</option>
+                        <option value="+230">🇲🇺 +230</option>
+                        <option value="+52">🇲🇽 +52</option>
+                        <option value="+373">🇲🇩 +373</option>
+                        <option value="+377">🇲🇨 +377</option>
+                        <option value="+976">🇲🇳 +976</option>
+                        <option value="+382">🇲🇪 +382</option>
+                        <option value="+212">🇲🇦 +212</option>
+                        <option value="+258">🇲🇿 +258</option>
+                        <option value="+95">🇲🇲 +95</option>
+                        <option value="+264">🇳🇦 +264</option>
+                        <option value="+977">🇳🇵 +977</option>
+                        <option value="+31">🇳🇱 +31</option>
+                        <option value="+64">🇳🇿 +64</option>
+                        <option value="+505">🇳🇮 +505</option>
+                        <option value="+227">🇳🇪 +227</option>
+                        <option value="+234">🇳🇬 +234</option>
+                        <option value="+850">🇰🇵 +850</option>
+                        <option value="+47">🇳🇴 +47</option>
+                        <option value="+968">🇴🇲 +968</option>
+                        <option value="+92">🇵🇰 +92</option>
+                        <option value="+970">🇵🇸 +970</option>
+                        <option value="+507">🇵🇦 +507</option>
+                        <option value="+675">🇵🇬 +675</option>
+                        <option value="+595">🇵🇾 +595</option>
+                        <option value="+51">🇵🇪 +51</option>
+                        <option value="+63">🇵🇭 +63</option>
+                        <option value="+48">🇵🇱 +48</option>
+                        <option value="+351">🇵🇹 +351</option>
+                        <option value="+974">🇶🇦 +974</option>
+                        <option value="+40" selected>🇷🇴 +40</option>
+                        <option value="+7">🇷🇺 +7</option>
+                        <option value="+250">🇷🇼 +250</option>
+                        <option value="+966">🇸🇦 +966</option>
+                        <option value="+221">🇸🇳 +221</option>
+                        <option value="+381">🇷🇸 +381</option>
+                        <option value="+65">🇸🇬 +65</option>
+                        <option value="+421">🇸🇰 +421</option>
+                        <option value="+386">🇸🇮 +386</option>
+                        <option value="+27">🇿🇦 +27</option>
+                        <option value="+82">🇰🇷 +82</option>
+                        <option value="+34">🇪🇸 +34</option>
+                        <option value="+94">🇱🇰 +94</option>
+                        <option value="+249">🇸🇩 +249</option>
+                        <option value="+46">🇸🇪 +46</option>
+                        <option value="+41">🇨🇭 +41</option>
+                        <option value="+963">🇸🇾 +963</option>
+                        <option value="+886">🇹🇼 +886</option>
+                        <option value="+992">🇹🇯 +992</option>
+                        <option value="+255">🇹🇿 +255</option>
+                        <option value="+66">🇹🇭 +66</option>
+                        <option value="+228">🇹🇬 +228</option>
+                        <option value="+216">🇹🇳 +216</option>
+                        <option value="+90">🇹🇷 +90</option>
+                        <option value="+993">🇹🇲 +993</option>
+                        <option value="+256">🇺🇬 +256</option>
+                        <option value="+380">🇺🇦 +380</option>
+                        <option value="+971">🇦🇪 +971</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+598">🇺🇾 +598</option>
+                        <option value="+998">🇺🇿 +998</option>
+                        <option value="+58">🇻🇪 +58</option>
+                        <option value="+84">🇻🇳 +84</option>
+                        <option value="+967">🇾🇪 +967</option>
+                        <option value="+260">🇿🇲 +260</option>
+                        <option value="+263">🇿🇼 +263</option>
+                    </select>
+                    <input type="tel" id="phone" class="form-control" placeholder="123456789" pattern="[0-9]+" title="Phone number must contain only numbers" style="border-radius: 0 0.75rem 0.75rem 0; border-left: 0;" required>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label for="password" class="modern-form-label">Password</label>
+                <input type="password" id="password" class="modern-form-control" placeholder="Create a secure password" required>
+            </div>
+            <button type="submit" class="btn btn-modern-primary w-100 py-3 mb-3">
+                Create Account
+            </button>
+        </form>
+        
+        <div class="text-center">
+            <p class="text-muted mb-0">
+                Already have an account? 
+                <a href="/parent-login.html" class="fw-semibold text-decoration-none" style="color: var(--primary-blue);">
+                    Log in here
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function goToLogin() {
+        location.href = "/parent-login.html";
+    }
+    
+    function showSuccessModal() {
+        document.getElementById("successModal").classList.add("show");
+    }
+    
+    function showErrorModal(message) {
+        document.getElementById("errorMessage").textContent = message;
+        document.getElementById("errorModal").classList.add("show");
+    }
+    
+    function closeErrorModal() {
+        document.getElementById("errorModal").classList.remove("show");
+    }
+    
+    document.getElementById("regForm").addEventListener("submit", async e => {
+      e.preventDefault();
+      const countryCode = document.getElementById("countryCode").value;
+      const phoneNumber = document.getElementById("phone").value.trim();
+      const fullPhone = countryCode + phoneNumber;
+      
+      const payload = {
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: fullPhone,
+        password: document.getElementById("password").value.trim()
+      };
+      
+      try {
+        const res = await fetch("/api/parents/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        
+        if (res.ok) {
+          showSuccessModal();
+        } else {
+          const errorText = await res.text();
+          showErrorModal(errorText || "Registration failed. Please try again.");
+        }
+      } catch (error) {
+        showErrorModal("Network error. Please check your connection and try again.");
+      }
+    });
+</script>
+
+</body>
+</html>
